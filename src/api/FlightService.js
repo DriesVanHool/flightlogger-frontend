@@ -1,7 +1,7 @@
 import client from "./Client";
 
-export function getFlights(){
-    return client.get('flight')
+export async function getFlights(){
+    return await client.get('flight')
 }
 
 export async function addFlight(flight){

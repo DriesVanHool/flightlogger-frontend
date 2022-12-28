@@ -1,3 +1,3 @@
 # Getting Started with Create React App
 
-Front-end of flightlogger
+React Front-end for [flightlogger api](https://github.com/DriesVanHool/flightlogger)
