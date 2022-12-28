@@ -36,3 +36,28 @@
     transform: rotate(360deg);
   }
 }
+
+
+.container-fluid{
+  max-width: 1500px;
+}
+
+td{
+  cursor: pointer;
+}
+
+#searchInput{
+  margin-top: 10px;
+  margin-bottom: 10px;
+  float: right;
+  width: 200px;
+}
+
+.flightInfo p{
+  font-family: Verdana, sans-serif;
+  font-size: 12px;
+}
+
+.flightInfo h6{
+  font-size: 16px;
+}
