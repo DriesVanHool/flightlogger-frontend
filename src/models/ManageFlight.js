@@ -1,10 +1,10 @@
 export default class ManageFlight{
-    constructor(departureTime, departureAirport, arrivalTime, arrivalAirport, aircraft, remark) {
+    constructor(departureTime, departureAirportId, arrivalTime, arrivalAirportId, aircraftId, remark) {
         this.departureTime = departureTime
-        this.departureAirport = departureAirport
+        this.departureAirportId = departureAirportId
         this.arrivalTime = arrivalTime
-        this.arrivalAirport = arrivalAirport
-        this.aircraft = aircraft
+        this.arrivalAirportId = arrivalAirportId
+        this.aircraftId = aircraftId
         this.remark = remark
     }
 }

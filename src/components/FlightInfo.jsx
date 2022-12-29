@@ -1,11 +1,14 @@
 import React from "react";
 import {Modal, Button} from "react-bootstrap";
+import {deleteFlight} from "../api/FlightService";
+import {Link} from "react-router-dom";
 
-function FlightInfo({selectedFlight, triggerParentUpdate}){
+function FlightInfo({selectedFlight, triggerParentUpdate}) {
+    const handleDelete = () => deleteFlight(selectedFlight.id).then(triggerParentUpdate);
     return (
         <div
             className="modal show"
-            style={{ display: 'block', position: 'initial' }}
+            style={{display: 'block', position: 'initial'}}
         >
             {selectedFlight && (
                 <Modal.Dialog>
@@ -17,11 +20,13 @@ function FlightInfo({selectedFlight, triggerParentUpdate}){
                         <div className="row">
                             <div className="col-md-6">
                                 <h6>{selectedFlight.departureAirport.name}: {selectedFlight.departureTime}</h6>
-                                <p>IATA: {selectedFlight.departureAirport.iata} - ICAO: {selectedFlight.departureAirport.icao}</p>
+                                <p>IATA: {selectedFlight.departureAirport.iata} -
+                                    ICAO: {selectedFlight.departureAirport.icao}</p>
                             </div>
                             <div className="col-md-6">
                                 <h6>{selectedFlight.arrivalAirport.name}: {selectedFlight.arrivalTime}</h6>
-                                <p>IATA: {selectedFlight.arrivalAirport.iata} - ICAO: {selectedFlight.arrivalAirport.icao}</p>
+                                <p>IATA: {selectedFlight.arrivalAirport.iata} -
+                                    ICAO: {selectedFlight.arrivalAirport.icao}</p>
                             </div>
                         </div>
                         <div className="row">
@@ -38,7 +43,10 @@ function FlightInfo({selectedFlight, triggerParentUpdate}){
 
                     <Modal.Footer>
                         <Button variant="secondary" onClick={triggerParentUpdate}>Close</Button>
-                        <Button variant="primary">Save changes</Button>
+                        <Button variant="danger" onClick={handleDelete}>Delete</Button>
+                        <Link to="/create" state={{selectedFlight: {selectedFlight}}}>
+                            <Button variant="primary">Edit</Button>
+                        </Link>
                     </Modal.Footer>
                 </Modal.Dialog>
             )}
