@@ -7,13 +7,14 @@ import {addFlight, updateFlight} from "../api/FlightService";
 
 function ManageFlight() {
     const location = useLocation();
-    const {selectedFlight} = location.state.selectedFlight;
+    const selectedFlight = location.state?.selectedFlight;
+
     const defaultFormFields = selectedFlight ? {
         departureTime: selectedFlight.departureTime,
-        departureAirportId: selectedFlight.departureAirportId,
+        departureAirportId: selectedFlight.departureAirport.id,
         arrivalTime: selectedFlight.arrivalTime,
-        arrivalAirportId: selectedFlight.arrivalAirportId,
-        aircraftId: selectedFlight.aircraftId,
+        arrivalAirportId: selectedFlight.arrivalAirport.id,
+        aircraftId: selectedFlight.aircraft.id,
         remark: selectedFlight.remark
     } : {
         departureTime: '',
@@ -38,14 +39,18 @@ function ManageFlight() {
     const [airports, setAirports] = useState([]);
     const [aircrafts, setAircrafts] = useState([]);
 
-    useEffect(updateForm, []);
+    useEffect(()=>{
+        updateForm()
+    }, []);
 
     function updateForm() {
         getAirports().then((result) => setAirports(result.data))
         getAircrafts().then((result) => setAircrafts(result.data))
     }
 
-    const handleSubmit = () => addFlight({...formValue})
+    const handleSubmit = () => {
+        addFlight({...formValue})
+    }
     const updateSubmit = () => updateFlight(selectedFlight.id, {...formValue})
 
     return (
@@ -57,7 +62,7 @@ function ManageFlight() {
                             <div className="col-md-6">
                                 <Form.Label className="text-muted">Airport</Form.Label>
                                 <Form.Select name="departureAirportId" onChange={handleChange}
-                                             defaultValue={selectedFlight ? selectedFlight.departureAirport.id : 0}>
+                                             value={formValue.departureAirportId}>
                                     <option>Departure</option>
                                     {
                                         airports.map((airport) => (
@@ -69,13 +74,13 @@ function ManageFlight() {
                             <div className="col-md-6">
                                 <Form.Label className="text-muted">Time</Form.Label>
                                 <Form.Control name="departureTime" type="datetime-local" onChange={handleChange}
-                                              defaultValue={selectedFlight ? selectedFlight.departureTime : null}/>
+                                              value={formValue.departureTime}/>
                             </div>
                         </Form.Group>
                         <Form.Group className="row mb-3">
                             <div className="col-md-6">
                                 <Form.Select name="arrivalAirportId" onChange={handleChange}
-                                             defaultValue={selectedFlight ? selectedFlight.arrivalAirport.id : 0}>
+                                             value={formValue.arrivalAirportId}>
                                     <option>Arrival</option>
                                     {
                                         airports.map((airport) => (
@@ -86,14 +91,14 @@ function ManageFlight() {
                             </div>
                             <div className="col-md-6">
                                 <Form.Control name="arrivalTime" type="datetime-local" onChange={handleChange}
-                                              defaultValue={selectedFlight ? selectedFlight.arrivalTime : null}/>
+                                              value={formValue.departureTime}/>
                             </div>
                         </Form.Group>
                         <Form.Group className="row mb-3">
                             <div className="col-md-6">
                                 <Form.Label className="text-muted">Aircraft</Form.Label>
                                 <Form.Select name="aircraftId" onChange={handleChange}
-                                             defaultValue={selectedFlight ? selectedFlight.aircraft.id : 0}>
+                                             value={formValue.aircraftId}>
                                     <option>-</option>
                                     {
                                         aircrafts.map((aircraft) => (
@@ -108,7 +113,7 @@ function ManageFlight() {
                             <div className="col-md-12">
                                 <Form.Label className="text-muted">Remark</Form.Label>
                                 <Form.Control as="textarea" rows={5} name="remark" onChange={handleChange}
-                                              defaultValue={selectedFlight ? selectedFlight.remark : ""}/>
+                                              value={formValue.remark}/>
                             </div>
                         </Form.Group>
                         <Form.Group className="row mb-3">

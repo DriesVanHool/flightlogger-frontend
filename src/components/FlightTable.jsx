@@ -18,7 +18,7 @@ function FlightTable() {
 
     return (
         <div id="flightTable">
-            <Link to="/create" state={{selectedFlight: {}}}>
+            <Link to="/create">
                 <Button id="btnAdd" variant="primary">
                     Add new log
                 </Button>

@@ -15,6 +15,7 @@ function App() {
                   <Routes>
                       <Route exact path="/" element={<FlightTable/>}/>
                       <Route exact path="/create" element={<ManageFlight/>}/>
+                      <Route exact path="/edit" element={<ManageFlight/>}/>
                       <Route path="*" element={<Navigate to="/"/>}/>
                   </Routes>
               </BrowserRouter>

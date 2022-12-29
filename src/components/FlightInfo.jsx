@@ -8,7 +8,7 @@ function FlightInfo({selectedFlight, triggerParentUpdate}) {
     return (
         <div
             className="modal show"
-            style={{display: 'block', position: 'initial'}}
+            style={{display: 'block'}}
         >
             {selectedFlight && (
                 <Modal.Dialog>
@@ -44,7 +44,7 @@ function FlightInfo({selectedFlight, triggerParentUpdate}) {
                     <Modal.Footer>
                         <Button variant="secondary" onClick={triggerParentUpdate}>Close</Button>
                         <Button variant="danger" onClick={handleDelete}>Delete</Button>
-                        <Link to="/create" state={{selectedFlight: {selectedFlight}}}>
+                        <Link to="/edit" state={{selectedFlight}}>
                             <Button variant="primary">Edit</Button>
                         </Link>
                     </Modal.Footer>
