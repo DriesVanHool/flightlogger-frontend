@@ -9,7 +9,7 @@ function ManageFlight() {
     const location = useLocation();
     const selectedFlight = location.state?.selectedFlight;
     const navigate = useNavigate();
-    const [errorMessage, setErrorMessage] = useState('');
+    const [errorMessage, setErrorMessage] = useState([]);
 
     const defaultFormFields = selectedFlight ? {
         departureTime: selectedFlight.departureTime,
@@ -45,12 +45,12 @@ function ManageFlight() {
         updateForm()
     }, []);
 
-    function printErrors(errors){
-        let result = ""
+    function setErrors(errors) {
+        const newErrors = [];
         for (const key in errors) {
-            result+=`${errors[key]} | `;
+            newErrors.push(errors[key])
         }
-        return result
+        setErrorMessage(newErrors)
     }
 
     function updateForm() {
@@ -60,20 +60,20 @@ function ManageFlight() {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        addFlight({...formValue}).then(() => navigate('/', {replace: true}), [navigate]).catch((error) => setErrorMessage(printErrors(error.response.data.details)))
+        addFlight({...formValue}).then(() => navigate('/', {replace: true}), [navigate]).catch((error) => setErrors(error.response.data.details))
     }
-    const updateSubmit = (e) =>{
+    const updateSubmit = (e) => {
         e.preventDefault()
-        updateFlight(selectedFlight.id, {...formValue}).then(() => navigate('/', {replace: true}), [navigate]).catch((error) => setErrorMessage(printErrors(error.response.data.details)))
+        updateFlight(selectedFlight.id, {...formValue}).then(() => navigate('/', {replace: true}), [navigate]).catch((error) => setErrors(error.response.data.details))
     }
 
     return (
         <Form>
-            {errorMessage && (
+            {errorMessage.length > 0 && (
                 <>
                     <br/>
-                    <Alert variant="danger" onClose={() => setErrorMessage("")} dismissible>
-                        <p>{errorMessage}</p>
+                    <Alert variant="danger" onClose={() => setErrorMessage([])} dismissible>
+                        {errorMessage.map((e) => <p key={e}>{e}</p>)}
                     </Alert>
                 </>
             )}
