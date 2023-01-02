@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
-import {Button, Form, Spinner} from "react-bootstrap";
-import {Link, useLocation} from "react-router-dom";
+import {Alert, Button, Form, Spinner} from "react-bootstrap";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import {getAirports} from "../api/AirportService";
 import {getAircrafts} from "../api/AircraftService";
 import {addFlight, updateFlight} from "../api/FlightService";
@@ -8,6 +8,8 @@ import {addFlight, updateFlight} from "../api/FlightService";
 function ManageFlight() {
     const location = useLocation();
     const selectedFlight = location.state?.selectedFlight;
+    const navigate = useNavigate();
+    const [errorMessage, setErrorMessage] = useState('');
 
     const defaultFormFields = selectedFlight ? {
         departureTime: selectedFlight.departureTime,
@@ -39,7 +41,7 @@ function ManageFlight() {
     const [airports, setAirports] = useState([]);
     const [aircrafts, setAircrafts] = useState([]);
 
-    useEffect(()=>{
+    useEffect(() => {
         updateForm()
     }, []);
 
@@ -48,13 +50,25 @@ function ManageFlight() {
         getAircrafts().then((result) => setAircrafts(result.data))
     }
 
-    const handleSubmit = () => {
-        addFlight({...formValue})
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        addFlight({...formValue}).then(() => navigate('/', {replace: true}), [navigate]).catch((error) => setErrorMessage(error.response.data.detail))
     }
-    const updateSubmit = () => updateFlight(selectedFlight.id, {...formValue})
+    const updateSubmit = (e) =>{
+        e.preventDefault()
+        updateFlight(selectedFlight.id, {...formValue}).then(() => navigate('/', {replace: true}), [navigate]).catch((error) => setErrorMessage(error.response.data.detail))
+    }
 
     return (
         <Form>
+            {errorMessage && (
+                <>
+                    <br/>
+                    <Alert variant="danger" onClose={() => setErrorMessage("")} dismissible>
+                        <p>{errorMessage}</p>
+                    </Alert>
+                </>
+            )}
             {
                 (airports.length > 0 && aircrafts.length > 0) ?
                     <Form.Group className="container-fluid" id="flightManagement">
@@ -123,19 +137,17 @@ function ManageFlight() {
                                         Cancel
                                     </Button>
                                 </Link>
-                                <Link to="/">
-                                    {
-                                        selectedFlight ? (
-                                            <Button variant="primary" type="submit"
-                                                    onClick={(event) => updateSubmit(event)}>
-                                                Update
-                                            </Button>
-                                        ) : <Button variant="primary" type="submit"
-                                                    onClick={(event) => handleSubmit(event)}>
-                                            Confirm
+                                {
+                                    selectedFlight ? (
+                                        <Button variant="primary" type="submit"
+                                                onClick={(event) => updateSubmit(event)}>
+                                            Update
                                         </Button>
-                                    }
-                                </Link>
+                                    ) : <Button variant="primary" type="submit"
+                                                onClick={(event) => handleSubmit(event)}>
+                                        Confirm
+                                    </Button>
+                                }
                             </div>
                         </Form.Group>
                     </Form.Group>
