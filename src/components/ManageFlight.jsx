@@ -45,6 +45,14 @@ function ManageFlight() {
         updateForm()
     }, []);
 
+    function printErrors(errors){
+        let result = ""
+        for (const key in errors) {
+            result+=`${errors[key]} | `;
+        }
+        return result
+    }
+
     function updateForm() {
         getAirports().then((result) => setAirports(result.data))
         getAircrafts().then((result) => setAircrafts(result.data))
@@ -52,11 +60,11 @@ function ManageFlight() {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        addFlight({...formValue}).then(() => navigate('/', {replace: true}), [navigate]).catch((error) => setErrorMessage(error.response.data.detail))
+        addFlight({...formValue}).then(() => navigate('/', {replace: true}), [navigate]).catch((error) => setErrorMessage(printErrors(error.response.data.details)))
     }
     const updateSubmit = (e) =>{
         e.preventDefault()
-        updateFlight(selectedFlight.id, {...formValue}).then(() => navigate('/', {replace: true}), [navigate]).catch((error) => setErrorMessage(error.response.data.detail))
+        updateFlight(selectedFlight.id, {...formValue}).then(() => navigate('/', {replace: true}), [navigate]).catch((error) => setErrorMessage(printErrors(error.response.data.details)))
     }
 
     return (

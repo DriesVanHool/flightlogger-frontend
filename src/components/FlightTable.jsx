@@ -30,7 +30,9 @@ function FlightTable() {
                     className="me-2"
                     aria-label="Search"
                     value={filterText}
-                    onChange={(e) => setFilterText(e.target.value)}
+                    onChange={(e) => {
+                        setFilterText(e.target.value)
+                    }}
                 />
             </Form>
             {searchFlights.length > 0 ? (
